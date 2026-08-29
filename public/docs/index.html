@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5" />
+  <title>Blitz Anime & Manga API — Free Endpoint by Blitz</title>
+  <meta name="description" content="Free public Anime & Manga API with search, streams, metadata and downloads. Built by Blitz (blitzlabx)." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --neon: #00f3ff;
+      --neon2: #bf00ff;
+      --thunder: #ffee00;
+      --bg: #05050f;
+      --card: rgba(10, 12, 30, 0.85);
+      --text: #e8f0ff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Rajdhani', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+    .lightning {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse at 20% 30%, rgba(0, 243, 255, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 70%, rgba(191, 0, 255, 0.07) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 50%, rgba(255, 238, 0, 0.03) 0%, transparent 60%);
+      animation: pulseGlow 8s ease-in-out infinite alternate;
+    }
+    @keyframes pulseGlow {
+      0% { opacity: 0.7; }
+      100% { opacity: 1; }
+    }
+    .bolt {
+      position: fixed;
+      width: 2px;
+      background: linear-gradient(to bottom, transparent, var(--thunder), transparent);
+      opacity: 0;
+      z-index: 1;
+      pointer-events: none;
+      filter: drop-shadow(0 0 6px var(--thunder));
+    }
+    header {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      padding: 3rem 1.25rem 2rem;
+    }
+    .logo {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 900;
+      font-size: clamp(1.6rem, 5.5vw, 2.9rem);
+      letter-spacing: 0.06em;
+      background: linear-gradient(135deg, var(--neon), var(--neon2), var(--thunder));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: 0 0 40px rgba(0, 243, 255, 0.4);
+      animation: titlePulse 3s ease-in-out infinite alternate;
+    }
+    @keyframes titlePulse {
+      from { filter: brightness(1); }
+      to { filter: brightness(1.25); }
+    }
+    .tagline {
+      margin-top: 0.75rem;
+      font-size: clamp(0.95rem, 2.8vw, 1.2rem);
+      color: #a0b8ff;
+      font-weight: 500;
+    }
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      justify-content: center;
+      margin-top: 1.4rem;
+    }
+    .badge {
+      background: rgba(0, 243, 255, 0.12);
+      border: 1px solid rgba(0, 243, 255, 0.35);
+      color: var(--neon);
+      padding: 0.3rem 0.8rem;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      backdrop-filter: blur(8px);
+    }
+    main {
+      position: relative;
+      z-index: 10;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 1.15rem 4rem;
+    }
+    section {
+      background: var(--card);
+      border: 1px solid rgba(0, 243, 255, 0.15);
+      border-radius: 16px;
+      padding: 1.6rem;
+      margin-bottom: 1.35rem;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 0 30px rgba(0, 243, 255, 0.05);
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    section:hover {
+      border-color: rgba(0, 243, 255, 0.4);
+      box-shadow: 0 0 40px rgba(0, 243, 255, 0.12);
+    }
+    h2 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.05rem;
+      color: var(--neon);
+      margin-bottom: 0.9rem;
+      letter-spacing: 0.05em;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+    h2::before { content: '⚡'; font-size: 1rem; }
+    p, li { font-size: 1.02rem; }
+    code, .endpoint {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      background: rgba(0, 0, 0, 0.45);
+      padding: 0.12rem 0.4rem;
+      border-radius: 6px;
+      color: var(--thunder);
+      font-size: 0.88em;
+    }
+    .endpoint-block {
+      background: rgba(0, 0, 0, 0.5);
+      border-left: 3px solid var(--neon2);
+      padding: 0.8rem 0.95rem;
+      margin: 0.65rem 0;
+      border-radius: 0 10px 10px 0;
+      overflow-x: auto;
+      font-size: 0.88rem;
+    }
+    .method {
+      color: #00ff9d;
+      font-weight: 700;
+      margin-right: 0.45rem;
+    }
+    ul { padding-left: 1.2rem; margin: 0.45rem 0; }
+    li { margin: 0.3rem 0; }
+    a {
+      color: var(--neon);
+      text-decoration: none;
+      transition: color 0.2s, text-shadow 0.2s;
+    }
+    a:hover {
+      color: var(--thunder);
+      text-shadow: 0 0 12px var(--thunder);
+    }
+    .try-btn {
+      display: inline-block;
+      margin-top: 0.9rem;
+      padding: 0.6rem 1.3rem;
+      background: linear-gradient(135deg, rgba(0, 243, 255, 0.2), rgba(191, 0, 255, 0.25));
+      border: 1px solid var(--neon);
+      color: white;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.92rem;
+      letter-spacing: 0.03em;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .try-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 25px rgba(0, 243, 255, 0.4);
+    }
+    .credit {
+      text-align: center;
+      margin-top: 2.2rem;
+      padding: 1.4rem;
+      border-top: 1px solid rgba(0, 243, 255, 0.15);
+      font-size: 0.92rem;
+      color: #8aa0d0;
+    }
+    .credit strong {
+      color: var(--neon);
+      font-family: 'Orbitron', sans-serif;
+    }
+    footer {
+      text-align: center;
+      padding: 1.8rem 1rem;
+      font-size: 0.82rem;
+      color: #6070a0;
+      position: relative;
+      z-index: 10;
+    }
+    @media (max-width: 600px) {
+      section { padding: 1.15rem; }
+      .endpoint-block { font-size: 0.78rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="lightning"></div>
+  <div id="bolts"></div>
+
+  <header>
+    <div class="logo">BLITZ ANIME & MANGA API</div>
+    <p class="tagline">Free • Streams • Downloads • Metadata • Built by Blitz</p>
+    <div class="badge-row">
+      <span class="badge">v2.5.0</span>
+      <span class="badge">CORS *</span>
+      <span class="badge">6 Anime</span>
+      <span class="badge">3 Manga</span>
+      <span class="badge">Downloads</span>
+      <span class="badge">Blitz (blitzlabx)</span>
+    </div>
+  </header>
+
+  <main>
+    <section>
+      <h2>Quick Start</h2>
+      <p>Free public API by <strong>Blitz (blitzlabx)</strong>. Search, stream, download anime episodes and manga chapters. Perfect for apps, bots and websites.</p>
+      <p style="margin-top:0.7rem">Base URL: <code id="base">https://your-render-url.onrender.com</code></p>
+      <a class="try-btn" href="/health" target="_blank">Test /health →</a>
+    </section>
+
+    <section>
+      <h2>Health & Uptime</h2>
+      <div class="endpoint-block"><span class="method">GET</span> /health</div>
+      <div class="endpoint-block"><span class="method">GET</span> /ping</div>
+      <p>Use for UptimeRobot, cron-job.org or Render health checks. Returns JSON with Blitz signature.</p>
+    </section>
+
+    <section>
+      <h2>Providers</h2>
+      <div class="endpoint-block"><span class="method">GET</span> /api/v1/providers</div>
+      <p><strong>Anime:</strong> allmanga, gogoanime, animeparadise, anikoto, megaplay, goyabu</p>
+      <p><strong>Manga:</strong> mangadex, weebcentral, mangapill</p>
+      <p><strong>Meta:</strong> anilist, mal, kitsu</p>
+    </section>
+
+    <section>
+      <h2>Search (Anime or Manga)</h2>
+      <div class="endpoint-block"><span class="method">GET</span> /api/v1/search?q=Frieren&provider=allmanga</div>
+      <div class="endpoint-block"><span class="method">GET</span> /api/v1/manga/search?q=Frieren&provider=mangadex</div>
+    </section>
+
+    <section>
+      <h2>Episodes / Chapters</h2>
+      <div class="endpoint-block"><span class="method">GET</span> /api/v1/content?id=allmanga:xxxxx</div>
+      <div class="endpoint-block"><span class="method">GET</span> /api/v1/content?id=mangadex:xxxxx</div>
+    </section>
+
+    <section>
+      <h2>Resolve Stream / Pages</h2>
+      <div class="endpoint-block"><span class="method">GET</span> /api/v1/stream?id=allmanga:xxxxx/1&language=sub</div>
+      <div class="endpoint-block"><span class="method">GET</span> /api/v1/stream?id=mangadex:xxxxx</div>
+      <p>Anime returns HLS/MP4. Manga returns high-res page image URLs.</p>
+    </section>
+
+    <section>
+      <h2>Download Video (MP4)</h2>
+      <div class="endpoint-block"><span class="method">GET</span> /api/v1/download/video?id=allmanga:xxxxx/1&language=sub</div>
+      <p>Resolves stream then converts HLS → MP4 using ffmpeg (server-side). Returns the file.</p>
+    </section>
+
+    <section>
+      <h2>Download Manga Chapter (ZIP)</h2>
+      <div class="endpoint-block"><span class="method">GET</span> /api/v1/download/manga?id=mangadex:xxxxx</div>
+      <p>Packs all chapter pages into a ZIP and streams it to the client.</p>
+    </section>
+
+    <section>
+      <h2>Metadata Layer</h2>
+      <div class="endpoint-block"><span class="method">GET</span> /api/v1/meta/search?q=Frieren&meta=anilist</div>
+      <div class="endpoint-block"><span class="method">GET</span> /api/v1/meta/info?id=anilist:21</div>
+      <div class="endpoint-block"><span class="method">GET</span> /api/v1/meta/browse?type=trending&catalogType=ANIME</div>
+      <div class="endpoint-block"><span class="method">GET</span> /api/v1/meta/stream?id=anilist:21&episode=1&provider=allmanga</div>
+    </section>
+
+    <section>
+      <h2>Credits</h2>
+      <p>Built by <strong>Blitz (blitzlabx)</strong>.</p>
+      <ul>
+        <li>Core engine: <a href="https://github.com/hexxt-git/anime-sdk" target="_blank" rel="noopener">anime-sdk</a> by hexxt-git</li>
+        <li>API design, downloads, docs, free public instance: Blitz</li>
+        <li>Social: <a href="https://x.com/blitzlabx" target="_blank" rel="noopener">@blitzlabx</a></li>
+      </ul>
+    </section>
+
+    <div class="credit">
+      <strong>⚡ BLITZ ANIME & MANGA API</strong><br />
+      Engineered by Blitz • Powered by anime-sdk<br />
+      Free forever for the community
+    </div>
+  </main>
+
+  <footer>
+    © 2026 Blitz (blitzlabx) • Neon Thunder Edition • v2.5.0
+  </footer>
+
+  <script>
+    document.getElementById('base').textContent = window.location.origin;
+    function spawnBolt() {
+      const bolt = document.createElement('div');
+      bolt.className = 'bolt';
+      bolt.style.left = Math.random() * 100 + 'vw';
+      bolt.style.top = Math.random() * 40 + 'vh';
+      bolt.style.height = (80 + Math.random() * 180) + 'px';
+      document.getElementById('bolts').appendChild(bolt);
+      requestAnimationFrame(() => {
+        bolt.style.transition = 'opacity 0.08s';
+        bolt.style.opacity = '0.85';
+        setTimeout(() => {
+          bolt.style.opacity = '0';
+          setTimeout(() => bolt.remove(), 200);
+        }, 90 + Math.random() * 80);
+      });
+    }
+    setInterval(() => { if (Math.random() > 0.65) spawnBolt(); }, 1400);
+    for (let i = 0; i < 3; i++) setTimeout(spawnBolt, i * 400);
+  </script>
+</body>
+</html>

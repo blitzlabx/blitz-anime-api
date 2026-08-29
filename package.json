@@ -1,0 +1,33 @@
+{
+  "name": "blitz-anime-api",
+  "version": "2.5.0",
+  "description": "Free high-performance Anime & Manga API with downloads. Built by Blitz (blitzlabx). Powered by anime-sdk.",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "keywords": [
+    "anime",
+    "manga",
+    "api",
+    "streaming",
+    "download",
+    "blitz",
+    "blitzlabx",
+    "free-api",
+    "anime-sdk"
+  ],
+  "author": "Blitz (blitzlabx)",
+  "license": "MIT",
+  "dependencies": {
+    "anime-sdk": "^1.1.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
